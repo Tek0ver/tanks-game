@@ -1,6 +1,5 @@
 import pygame
 from constants import *
-from log import log
 
 
 class Printer:
@@ -13,20 +12,24 @@ class Printer:
 
         key = str(font) + str(size)
 
-        log.log(f'Loading new font {key}')
-
         self.fonts[key] = pygame.font.Font(font, size)
 
     def print(self, surface: pygame.Surface, pos: tuple[int, int], text: str, size: int = 20, color: str = 'black', font: str = None):
+
+        image = self.get_text_surface(text, size, color, font)
+
+        surface.blit(image, pos)
+
+    def get_text_surface(self, text: str, size: int = 20, color: str = 'black', font: str = None):
 
         key = str(font) + str(size)
 
         if key not in self.fonts.keys():
             self.load_font(font, size)
 
-        image = self.fonts[key].render(text, False, color)
+        text_surface = self.fonts[key].render(text, True, color)
 
-        surface.blit(image, pos)
+        return text_surface
 
 
 printer = Printer()
